@@ -1,0 +1,12 @@
+# Tiny Worlds — Outcome tracker
+
+- [x] **World view and ecosystem simulation:** The app provides a richly animated, zoomable and pannable world view showing terrain, resources, organisms, movement, feeding, reproduction, predation, death, and other understandable ecosystem events. Multiple interacting species have populations that respond to resources, climate, habitat conditions, competition, predation, reproduction, mortality, and carrying capacity.
+- [x] **Heritable evolution:** Organisms inherit traits with mutation and natural selection so species characteristics and fitness distributions visibly evolve across generations.
+- [x] **Species and organism exploration:** A species browser and organism inspector show population status, life stage, health, needs, ancestry, traits, behavior, habitat preferences, and plain-language explanations of current outcomes.
+- [x] **Environmental controls:** Users can adjust temperature, rainfall, seasonality, resource abundance, terrain or habitat conditions, and disruptive events, with clear feedback on their effects.
+- [x] **Simulation controls and indicators:** Users can play, pause, change speed, step, restart, navigate time, and focus the camera, while seeing elapsed time, season, world health, and notable events.
+- [x] **Histories and ecosystem summaries:** Population, trait, resource, and biodiversity history is presented through interactive charts, comparisons, timelines, and ecosystem health summaries.
+- [x] **Scenarios and custom starts:** Scenario presets provide distinct starting species, environments, goals or pressures, and users can create a customized starting world.
+- [x] **Replay and event history:** The app records important births, deaths, mutations, migrations, extinctions, population shifts, and environmental changes and lets users revisit key moments.
+- [x] **Persistent worlds and responsive guidance:** Users can persistently save and load named complete worlds—including world state, settings, history, and replay data—with responsive desktop and mobile layouts and approachable contextual guidance.
+- [ ] **Engineering and delivery:** The app runs and builds without a third-party runtime dependency, contains automated Node tests for core simulation and persistence behavior, documents setup and controls, and is added to the user's GitHub as a new private repository after the GitHub connection confirmation flow.

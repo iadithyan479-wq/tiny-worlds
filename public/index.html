@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17261f">
+  <meta name="description" content="A living pocket biosphere. Watch a meadow change as species, seasons, and inherited traits shape its future.">
+  <title>Tiny Worlds — Living Ecosystem Simulator</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/tiny-worlds-mark.svg" type="image/svg+xml">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Tiny Worlds home">
+        <span class="brand-mark" aria-hidden="true"><img src="/tiny-worlds-mark.svg" alt=""></span>
+        <span class="brand-copy"><strong>Tiny Worlds</strong><small>FIELD STUDY No. 01</small></span>
+      </a>
+      <div class="top-status"><span class="live-dot" id="live-dot"></span><span id="run-status">Observing</span><span class="status-divider"></span><span id="world-name">Balanced meadow</span></div>
+      <div class="top-actions">
+        <button class="icon-button help-button" id="help-open" aria-label="Open field guide" title="Field guide">?</button>
+        <button class="button button-quiet" id="save-open"><span aria-hidden="true">↧</span><span class="button-label">Save world</span></button>
+        <button class="button button-primary" id="scenarios-open"><span aria-hidden="true">＋</span><span class="button-label">New world</span></button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="habitat-column" aria-label="Simulation habitat">
+        <div class="world-heading">
+          <div>
+            <div class="eyebrow"><span id="world-season">SPRING · DAY 000</span><span class="eyebrow-dot">/</span><span id="world-weather">18° · light breeze</span></div>
+            <h1 id="world-title">A meadow in motion</h1>
+            <p id="world-narrative">Every small life leaves a trace. Stay awhile and see what changes.</p>
+          </div>
+          <div class="health-chip" id="health-chip" title="Composite of biodiversity, plant cover, and animal health">
+            <span class="health-glyph">◌</span><span><small>WORLD HEALTH</small><strong id="world-health">—</strong></span>
+          </div>
+        </div>
+
+        <div class="world-frame" id="world-frame">
+          <canvas id="world-canvas" aria-label="Interactive habitat map. Drag to pan, use the mouse wheel to zoom, and select an organism to inspect it." tabindex="0"></canvas>
+          <div class="map-topline"><span class="map-label"><span class="legend-sun"></span> THE MEADOW <span class="map-coordinates" id="map-coordinates">64 × 38</span></span><button class="map-control" id="focus-home" title="Fit whole habitat" aria-label="Fit whole habitat">⌗</button></div>
+          <div class="map-legend" id="map-legend"><span><i class="legend-dot dot-mouse"></i>MOUSE</span><span><i class="legend-dot dot-fox"></i>FOX</span><span><i class="legend-dot dot-bee"></i>BEE</span><span><i class="legend-dot dot-frog"></i>FROG</span><span><i class="legend-dot dot-owl"></i>OWL</span></div>
+          <div class="map-hint" id="map-hint">Drag to explore · Scroll to zoom · Select a life</div>
+          <div class="map-event" id="map-event" aria-live="polite"></div>
+        </div>
+
+        <div class="transport-bar">
+          <div class="transport-controls">
+            <button class="transport-button" id="step-back" title="Back one day" aria-label="Back one day">‹</button>
+            <button class="play-button" id="play-toggle" aria-label="Pause simulation" title="Play or pause"><span id="play-icon">Ⅱ</span></button>
+            <button class="transport-button" id="step-forward" title="Advance one day" aria-label="Advance one day">›</button>
+            <button class="speed-button" id="speed-toggle" title="Change simulation speed">1×</button>
+          </div>
+          <div class="timeline-wrap">
+            <div class="timeline-labels"><span id="timeline-start">DAY 000</span><span class="timeline-caption">TIME IN THIS WORLD</span><span id="timeline-end">DAY 000</span></div>
+            <input id="timeline-slider" class="timeline-slider" type="range" min="0" max="0" value="0" aria-label="Explore the world's history">
+            <div class="timeline-events" id="timeline-ticks" aria-hidden="true"></div>
+          </div>
+          <button class="replay-button" id="return-live" disabled><span aria-hidden="true">↻</span><span>Live</span></button>
+        </div>
+
+        <section class="trend-section" aria-labelledby="trend-title">
+          <div class="section-head trend-head">
+            <div><div class="eyebrow">LONG VIEW</div><h2 id="trend-title">The living record</h2></div>
+            <div class="chart-tabs" role="tablist" aria-label="Choose a history chart">
+              <button class="chart-tab is-active" data-chart="population" role="tab" aria-selected="true">Populations</button>
+              <button class="chart-tab" data-chart="meadow" role="tab" aria-selected="false">Meadow</button>
+              <button class="chart-tab" data-chart="diversity" role="tab" aria-selected="false">Diversity</button>
+              <button class="chart-tab" data-chart="traits" role="tab" aria-selected="false">Traits</button>
+              <select id="trait-selector" class="chart-select" aria-label="Choose a trait or fitness distribution" hidden><option value="efficiency">Foraging efficiency</option><option value="speed">Speed</option><option value="fertility">Fertility</option><option value="resilience">Resilience</option><option value="camouflage">Camouflage</option><option value="moisture">Moisture affinity</option><option value="tempOptimum">Climate optimum</option><option value="tempTolerance">Climate tolerance</option><option value="fitness">Fitness</option></select>
+            </div>
+          </div>
+          <div class="chart-wrap"><div id="history-chart" class="history-chart" role="img" aria-label="Population history over time"></div><div class="chart-tooltip" id="chart-tooltip" aria-live="polite">Choose a chart to explore this world's history.</div></div>
+          <div class="chart-legend" id="chart-legend"></div>
+        </section>
+
+        <details class="environment-panel" id="environment-panel">
+          <summary><span class="summary-icon">⌁</span><span><strong>Shape the habitat</strong><small>Environmental controls · changes take effect now</small></span><span class="summary-chevron">＋</span></summary>
+          <div class="environment-content">
+            <div class="environment-intro"><p>Small shifts can echo through the whole food web. Watch the field notes for what follows.</p><div class="disturbance-actions"><button class="event-button" data-disturbance="rain">Rain</button><button class="event-button" data-disturbance="heatwave">Heatwave</button><button class="event-button" data-disturbance="coldSnap">Cold snap</button><button class="event-button event-danger" data-disturbance="fire">Grass fire</button><button class="event-button" data-disturbance="flood">Flood</button></div></div>
+            <div class="slider-grid">
+              <label class="setting-control"><span><b>Temperature</b><output id="out-temperature">18°C</output></span><input type="range" data-setting="temperature" min="-8" max="34" step="1"><small>Warmth shapes energy and growing seasons.</small></label>
+              <label class="setting-control"><span><b>Rainfall</b><output id="out-rainfall">62%</output></span><input type="range" data-setting="rainfall" min="0" max="100" step="1"><small>Water feeds plants and changes wetland cover.</small></label>
+              <label class="setting-control"><span><b>Seasonal swing</b><output id="out-seasonality">68%</output></span><input type="range" data-setting="seasonality" min="0" max="100" step="1"><small>Turn the yearly temperature and rainfall arc up or down.</small></label>
+              <label class="setting-control"><span><b>Meadow fertility</b><output id="out-resourceAbundance">70%</output></span><input type="range" data-setting="resourceAbundance" min="0" max="100" step="1"><small>Change the pace at which plant resources return.</small></label>
+              <label class="setting-control"><span><b>Habitat quality</b><output id="out-habitatQuality">76%</output></span><input type="range" data-setting="habitatQuality" min="0" max="100" step="1"><small>Improve shelter and room, or put more pressure on each species.</small></label>
+              <label class="setting-control"><span><b>Disturbance pressure</b><output id="out-disturbance">0%</output></span><input type="range" data-setting="disturbance" min="0" max="100" step="1"><small>Persistent stress from trampling and disrupted ground.</small></label>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <aside class="field-rail" aria-label="Species and field notes">
+        <section class="species-section">
+          <div class="section-head side-section-head"><div><div class="eyebrow">WHO LIVES HERE</div><h2>Species census</h2></div><span class="species-total" id="species-total">0</span></div>
+          <div class="species-list" id="species-list"></div>
+          <div class="side-note" id="species-insight">Select a species to trace its fortunes through time.</div>
+        </section>
+        <section class="inspector-section" id="inspector-section">
+          <div class="section-head side-section-head"><div><div class="eyebrow">CLOSE OBSERVATION</div><h2 id="inspector-title">Field notes</h2></div><button class="close-inspector" id="clear-inspector" aria-label="Clear selected organism" title="Clear selection">×</button></div>
+          <div id="inspector-content" class="inspector-content"><div class="empty-observation"><span class="observation-mark">✳</span><p>Choose a species or a small life in the meadow. Its current needs, traits, and story will appear here.</p></div></div>
+        </section>
+        <section class="quick-metrics" aria-label="World indicators">
+          <div class="section-head side-section-head"><div><div class="eyebrow">FIELD INDICATORS</div><h2>At a glance</h2></div></div>
+          <div class="metric-grid"><div class="metric-cell"><span>ANIMALS</span><strong id="metric-animals">—</strong></div><div class="metric-cell"><span>SPECIES</span><strong id="metric-species">—</strong></div><div class="metric-cell"><span>PLANT COVER</span><strong id="metric-plants">—</strong></div><div class="metric-cell"><span>BIODIVERSITY</span><strong id="metric-diversity">—</strong></div></div>
+        </section>
+        <section class="event-section">
+          <div class="section-head side-section-head"><div><div class="eyebrow">RECENT OBSERVATIONS</div><h2>Field notes</h2></div><span class="notes-count" id="notes-count">0</span></div>
+          <div class="event-feed" id="event-feed" aria-live="polite"></div>
+        </section>
+        <div class="privacy-note"><span aria-hidden="true">⌂</span><span><strong>Your field journal stays here.</strong><small>Worlds save in this browser only. Nothing is sent to a server.</small></span></div>
+      </aside>
+    </main>
+    <footer class="footer"><span>TINY WORLDS <span class="footer-divider">/</span> FIELD STUDY No. 01</span><span>AN EDUCATIONAL SIMULATION · NOT A FORECAST</span><button id="footer-guide">FIELD GUIDE</button></footer>
+  </div>
+
+  <dialog class="modal" id="scenario-dialog" aria-labelledby="scenario-title">
+    <form method="dialog"><button class="modal-close" aria-label="Close">×</button></form>
+    <div class="modal-eyebrow">CHOOSE A BEGINNING</div><h2 id="scenario-title">A new world</h2><p class="modal-copy">Different beginnings, different futures. Pick a pressure—or make your own.</p>
+    <div class="scenario-grid" id="scenario-grid"></div>
+    <section class="custom-world" id="custom-world">
+      <div class="custom-world-head"><h3>Make a custom meadow</h3><p>Adjust the first conditions. You can always change them later.</p></div>
+      <div class="custom-grid">
+        <label>Temperature <span><input type="number" id="custom-temperature" value="18" min="-8" max="34"> °C</span></label>
+        <label>Rainfall <span><input type="number" id="custom-rainfall" value="62" min="0" max="100"> %</span></label>
+        <label>Meadow fertility <span><input type="number" id="custom-resources" value="70" min="0" max="100"> %</span></label>
+        <label>Habitat quality <span><input type="number" id="custom-habitat" value="76" min="0" max="100"> %</span></label>
+      </div>
+      <div class="population-starters" id="population-starters"></div>
+      <button class="button button-primary button-wide" id="create-custom">Plant this world <span aria-hidden="true">→</span></button>
+    </section>
+  </dialog>
+
+  <dialog class="modal save-modal" id="save-dialog" aria-labelledby="save-title">
+    <form method="dialog"><button class="modal-close" aria-label="Close">×</button></form>
+    <div class="modal-eyebrow">YOUR FIELD JOURNAL</div><h2 id="save-title">Keep this world</h2><p class="modal-copy">Named worlds, event history, and replay checkpoints stay in this browser. You can also carry a world to another device with a JSON export.</p>
+    <label class="save-name-label" for="save-name">WORLD NAME</label><div class="save-name-row"><input id="save-name" maxlength="44" autocomplete="off"><button class="button button-primary" id="save-confirm">Save</button></div>
+    <div class="save-list-head"><h3>Saved worlds</h3><button class="text-button" id="export-world">Export current world</button><label class="text-button file-label">Import JSON<input type="file" id="import-world" accept="application/json,.json" hidden></label></div>
+    <div class="save-list" id="save-list"></div>
+  </dialog>
+
+  <dialog class="modal guide-modal" id="guide-dialog" aria-labelledby="guide-title">
+    <form method="dialog"><button class="modal-close" aria-label="Close">×</button></form>
+    <div class="modal-eyebrow">A FIELD GUIDE FOR CURIOUS OBSERVERS</div><h2 id="guide-title">Look closer. Change one thing.</h2>
+    <p class="modal-copy">Tiny Worlds is a simplified living system, not a scripted story. Plants respond to warmth and rain; every animal has needs; descendants carry their parents' traits, with small differences.</p>
+    <div class="guide-grid"><article><span>01 / WATCH</span><h3>Follow the food web</h3><p>Bees and mice use meadow plants. Frogs hunt bees. Foxes and owls hunt mice and frogs. More life doesn't always mean a healthier world.</p></article><article><span>02 / NOTICE</span><h3>Read the small signs</h3><p>Choose an animal to see its energy, health, ancestry, and inherited traits. Plain-language notes connect today's conditions to what it needs.</p></article><article><span>03 / NUDGE</span><h3>Change a condition</h3><p>Adjust warmth, rain, habitat, or fertility. Try a brief disturbance and use the history scrubber to trace the ripple afterward.</p></article><article><span>04 / RETURN</span><h3>Save your field journal</h3><p>Named worlds are stored only in this browser. Export a JSON file for a portable backup; importing another world replaces the current one after you confirm.</p></article></div>
+    <button class="button button-primary guide-close" id="guide-close">Back to the meadow <span aria-hidden="true">→</span></button>
+  </dialog>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
